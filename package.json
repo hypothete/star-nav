@@ -1,0 +1,31 @@
+{
+  "name": "star-nav",
+  "version": "0.0.0",
+  "description": "Celestial navigation in Three.js",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hypothete/star-nav.git"
+  },
+  "author": "hypothete",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hypothete/star-nav/issues"
+  },
+  "homepage": "https://github.com/hypothete/star-nav",
+  "dependencies": {
+    "connect-livereload": "^0.6.0",
+    "grunt": "^1.0.1",
+    "grunt-concurrent": "^2.3.1",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-connect": "^1.0.2",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "load-grunt-tasks": "^3.5.2",
+    "three": "^0.82.1"
+  }
+}
