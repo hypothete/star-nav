@@ -15,12 +15,12 @@
   var centerToAxis = new THREE.Vector3(0,1,0);
 
   var globeMat = new THREE.MeshStandardMaterial({
-    color:0x021080,
-    roughness: 0.2
+    metalness: 0
   });
   var redMat = new THREE.MeshStandardMaterial({
     color:0xff0303,
-    roughness: 0.8
+    roughness: 0.8,
+    metalness: 1
   });
 
   //for testing
@@ -35,10 +35,13 @@
   var globeGeo = new THREE.SphereGeometry(1,128,128);
   var globeMesh = new THREE.Mesh(globeGeo, globeMat);
 
+  //the sky and sky light
   var skyMat = new THREE.MeshBasicMaterial({
     side: THREE.BackSide
   });
   var skyMesh = new THREE.Mesh(globeGeo, skyMat);
+  var skyAmbient = new THREE.AmbientLight(0x404060);
+  var sunLight = new THREE.SpotLight(0xfff0f0);
 
   var maxWalkSpeed = 0.01;
   var maxTurnSpeed = 0.01;
@@ -54,15 +57,21 @@
   var mousedown = false;
 
   Promise.all([
-    loadTexture('img/constellation_figures.jpg')
-    ])
+    loadTexture('img/constellation_figures.jpg'),
+    loadTexture('img/earth-map.jpg'),
+    loadTexture('img/earth-rough-map.jpg')
+  ])
   .then(init);
 
   function init(agg){
     skyMat.map = agg[0];
     skyMat.needsUpdate = true;
-    skyMesh.scale.set(5,5,5);
+    skyMesh.scale.set(2,2,2);
     scene.add(skyMesh);
+
+    globeMat.map = agg[1];
+    globeMat.roughnessMap = agg[2];
+    globeMat.needsUpdate = true;
 
     //renderer setup
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -79,12 +88,11 @@
     playerCam.up.set(0,0,1);
     playerCam.position.set(-10*charScale,0,5*charScale);
     playerCam.lookAt(playerCamTarget);
-    var globeLight = new THREE.SpotLight(0xfff0f0);
-    scene.add(globeLight);
-    globeLight.position.set(0,0,3);
-    globeLight.angle = Math.PI/3;
-    //globeLight.shadow.camera.fov = globeLight.angle*180/Math.PI;
-    globeLight.target = playerObj;
+    scene.add(sunLight, skyAmbient);
+    sunLight.position.set(0,0,3);
+    sunLight.angle = Math.PI/3;
+    //sunLight.shadow.camera.fov = sunLight.angle*180/Math.PI;
+    sunLight.target = playerObj;
     renderAll();
   }
 
