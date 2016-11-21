@@ -24,12 +24,12 @@
   });
 
   //for testing
-  var debugGeo = new THREE.SphereGeometry(0.01,8,8);
+  var debugGeo = new THREE.SphereGeometry(0.001,8,8);
   var debugBall = new THREE.Mesh(debugGeo, redMat);
 
   //provides the minimap view
   var playerCam = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.001, 100 );
-  var playerCamTarget = new THREE.Vector3(-0.004,0,0);
+  var playerCamTarget = new THREE.Vector3(2,0,0);
 
   //the globe
   var globeGeo = new THREE.SphereGeometry(1,128,128);
@@ -41,16 +41,18 @@
   });
   var skyMesh = new THREE.Mesh(globeGeo, skyMat);
   var skyAmbient = new THREE.AmbientLight(0x404060);
-  var sunLight = new THREE.SpotLight(0xfff0f0);
+  var sunPivot = new THREE.Object3D();
+  var sunLight = new THREE.DirectionalLight(0xfff0f0);
+  var sunspeed = 0.001;
 
-  var maxWalkSpeed = 0.01;
-  var maxTurnSpeed = 0.01;
+  var maxWalkSpeed = 0.1;
+  var maxTurnSpeed = 0.008;
   var walkSpeed = 0;
   var turnSpeed = 0;
   var friction = 0.13;
   var turndelta = 0.0001;
   var walkdelta = 0.00001;
-  var charScale = 0.05;
+  var charScale = 0.001;
 
   //DOM stuff
   var mousePosition = new THREE.Vector2(0,0);
@@ -86,13 +88,14 @@
     playerObj.rotation.z += Math.PI;
     playerObj.add(playerCam, debugBall);
     playerCam.up.set(0,0,1);
-    playerCam.position.set(-10*charScale,0,5*charScale);
+    playerCam.position.set(-10*charScale,0,2*charScale);
     playerCam.lookAt(playerCamTarget);
-    scene.add(sunLight, skyAmbient);
-    sunLight.position.set(0,0,3);
-    sunLight.angle = Math.PI/3;
+    sunPivot.add(sunLight);
+    sunLight.position.set(0,0,-1);
+    scene.add(sunPivot, skyAmbient);
+    //sunLight.angle = Math.PI/3;
     //sunLight.shadow.camera.fov = sunLight.angle*180/Math.PI;
-    sunLight.target = playerObj;
+    //sunLight.target = playerObj;
     renderAll();
   }
 
@@ -105,12 +108,13 @@
   function renderAll(){
     window.requestAnimationFrame(renderAll);
     moveWithMouse();
+    sunPivot.rotation.y += sunspeed;
     renderer.render(scene, playerCam);
   }
 
   function moveWithMouse(){
     if(mousedown){
-      walkSpeed += -charScale*0.2*(mousePosition.y);
+      walkSpeed += -charScale*(mousePosition.y);
       if(walkSpeed > maxWalkSpeed){
         walkSpeed = maxWalkSpeed;
       }
