@@ -43,7 +43,7 @@
   var skyAmbient = new THREE.AmbientLight(0x404060);
   var sunPivot = new THREE.Object3D();
   var sunLight = new THREE.DirectionalLight(0xfff0f0);
-  var sunspeed = 0.001;
+  var sunspeed = 0.01;
 
   var maxWalkSpeed = 0.1;
   var maxTurnSpeed = 0.008;
@@ -69,7 +69,6 @@
     skyMat.map = agg[0];
     skyMat.needsUpdate = true;
     skyMesh.scale.set(2,2,2);
-    scene.add(skyMesh);
 
     globeMat.map = agg[1];
     globeMat.roughnessMap = agg[2];
@@ -90,7 +89,7 @@
     playerCam.up.set(0,0,1);
     playerCam.position.set(-10*charScale,0,2*charScale);
     playerCam.lookAt(playerCamTarget);
-    sunPivot.add(sunLight);
+    sunPivot.add(skyMesh,sunLight);
     sunLight.position.set(0,0,-1);
     scene.add(sunPivot, skyAmbient);
     //sunLight.angle = Math.PI/3;
