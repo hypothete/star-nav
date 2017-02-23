@@ -41,17 +41,18 @@
   });
   var skyMesh = new THREE.Mesh(globeGeo, skyMat);
   var skyAmbient = new THREE.AmbientLight(0x404060);
+  var skySpeed = 0.01/365;
   var sunPivot = new THREE.Object3D();
   var sunLight = new THREE.DirectionalLight(0xfff0f0);
   var sunspeed = 0.01;
 
   var maxWalkSpeed = 0.1;
-  var maxTurnSpeed = 0.008;
+  var maxTurnSpeed = 0.08;
   var walkSpeed = 0;
   var turnSpeed = 0;
   var friction = 0.13;
-  var turndelta = 0.0001;
-  var walkdelta = 0.00001;
+  var turndelta = 0.001;
+  var walkdelta = 0.0001;
   var charScale = 0.001;
 
   //DOM stuff
@@ -88,7 +89,6 @@
     playerObj.add(playerCam, debugBall);
     playerCam.up.set(0,0,1);
     playerCam.position.set(-10*charScale,0,2*charScale);
-    playerCam.lookAt(playerCamTarget);
     sunPivot.add(skyMesh,sunLight);
     sunLight.position.set(0,0,-1);
     scene.add(sunPivot, skyAmbient);
@@ -108,6 +108,8 @@
     window.requestAnimationFrame(renderAll);
     moveWithMouse();
     sunPivot.rotation.y += sunspeed;
+    skyMesh.rotation.y += skySpeed;
+    playerCam.lookAt(scene.position);
     renderer.render(scene, playerCam);
   }
 
@@ -160,7 +162,6 @@
     else if(evt.wheelDelta < 0){
       playerCam.position.multiplyScalar(1.1);
     }
-    //playerCam.lookAt(playerCamTarget);
   });
 
   window.addEventListener('resize', function(){
