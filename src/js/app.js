@@ -26,10 +26,16 @@
   //for testing
   var debugGeo = new THREE.SphereGeometry(0.001,8,8);
   var debugBall = new THREE.Mesh(debugGeo, redMat);
+  var arrowdir = new THREE.Vector3(0,0,1);
+  var arroworigin = new THREE.Vector3();
+  var arrowlength = 0.01;
+  var arrowhex = 0x00ffcc;
+  var debugArrow = new THREE.ArrowHelper(arrowdir, arroworigin, arrowlength, arrowhex);
 
   //provides the minimap view
   var playerCam = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.001, 100 );
   var playerCamTarget = new THREE.Vector3(2,0,0);
+  var playerCamSlew = new THREE.Object3D();
 
   //the globe
   var globeGeo = new THREE.SphereGeometry(1,128,128);
@@ -41,11 +47,10 @@
   });
   var skyMesh = new THREE.Mesh(globeGeo, skyMat);
   var skyAmbient = new THREE.AmbientLight(0x404060);
-  var skySpeed = 0.01/365;
   var sunPivot = new THREE.Object3D();
   var sunLight = new THREE.DirectionalLight(0xfff0f0);
-  var sunspeed = 0.01;
-
+  var sunspeed = 0.001;
+  var skySpeed = sunspeed/365;
   var maxWalkSpeed = 0.1;
   var maxTurnSpeed = 0.08;
   var walkSpeed = 0;
@@ -86,7 +91,8 @@
     playerObj.lookAt(globeMesh.position);
     playerObj.rotation.x+= Math.PI;
     playerObj.rotation.z += Math.PI;
-    playerObj.add(playerCam, debugBall);
+    playerObj.add(playerCamSlew, debugBall, debugArrow);
+    playerCamSlew.add(playerCam);
     playerCam.up.set(0,0,1);
     playerCam.position.set(-10*charScale,0,2*charScale);
     sunPivot.add(skyMesh,sunLight);
