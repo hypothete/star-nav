@@ -55,7 +55,7 @@
   var maxTurnSpeed = 0.08;
   var walkSpeed = 0;
   var turnSpeed = 0;
-  var friction = 0.13;
+  var friction = 0.03;
   var turndelta = 0.001;
   var walkdelta = 0.0001;
   var charScale = 0.001;
@@ -63,6 +63,7 @@
   //DOM stuff
   var mousePosition = new THREE.Vector2(0,0);
   var mousedown = false;
+  var mousebtn = -1;
 
   Promise.all([
     loadTexture('img/constellation_figures.jpg'),
@@ -153,8 +154,9 @@
     mousePosition = mousePosition.copy(newMP);
   });
 
-  document.addEventListener('mousedown', function(){
+  document.addEventListener('mousedown', function(evt){
     mousedown = true;
+    mousebtn = evt.buttons;
   });
 
   document.addEventListener('mouseup', function(){
